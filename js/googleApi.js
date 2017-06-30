@@ -68,7 +68,7 @@ export default {
 	//	console.log("WARNING: GOOGLE MAPS REQUESTS PERFORMED WITHOUT API KEY");
 	//}
 
-    return this.geocodeRequest(`${googleUrl}?`+apiKey?`key=${apiKey}&`:''+`latlng=${position.lat},${position.lng}`);
+    return this.geocodeRequest(`${googleUrl}?`+(apiKey?`key=${apiKey}&`:'')+`latlng=${position.lat},${position.lng}`, rawFormat);
   },
 
   geocodeAddress(apiKey, address, rawFormat) {
@@ -80,7 +80,7 @@ export default {
 	//	console.log("WARNING: GOOGLE MAPS REQUESTS PERFORMED WITHOUT API KEY");
 	//}
 
-    return this.geocodeRequest(`${googleUrl}?`+apiKey?`key=${apiKey}&`:''+`address=${encodeURI(address)}`);
+    return this.geocodeRequest(`${googleUrl}?`+(apiKey?`key=${apiKey}&`:'')+`address=${encodeURI(address)}`, rawFormat);
   },
 
   async geocodeRequest(url, rawFormat) {

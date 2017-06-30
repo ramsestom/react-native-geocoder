@@ -4,23 +4,22 @@ import GoogleApi from './googleApi.js';
 const { RNGeocoder } = NativeModules;
 
 
-static function getKey (point, possibleValues) {
-    var key;
-    possibleValues.every(function(val) {
-		//if(typeof point != 'object') {return true;}
-		return point.hasOwnProperty(val) ? (function() { key = val; return false; }()) : true;
-    });
-    return key;
+function getVal (position, possibleKeys) {
+	for (let key of possibleKeys) {
+		if (position.hasOwnProperty(key)){
+			return position[key];
+		}
+	}
+	return undefined;
 }
 
-static function toGeoPoint(position){
+function toGeoPoint (position) {
 	if (!position || typeof position != 'object'){return null;}
-	var latitude = getKey(position, ['lat', 'latitude']);
-	var longitude = getKey(position, ['lng', 'lon', 'longitude']);
-    if (!latitude || !longitude){return null;}
-	return {lat: latitude, lng: longitude};
+	var latitude = getVal(position, ['lat', 'latitude']);
+	var longitude = getVal(position, ['lng', 'lon', 'longitude']);
+	if (!latitude || !longitude){return null;}
+	return ({lat: latitude, lng: longitude});
 }
-
 
 export default {
   apiKey: null,

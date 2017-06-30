@@ -57,31 +57,45 @@ function format(raw) {
   return address;
 }
 
+
 export default {
-  geocodePosition(apiKey, position) {
-    if (!apiKey || !position || !position.lat || !position.lng) {
-      return Promise.reject(new Error("invalid apiKey / position"));
+  geocodePosition(apiKey, position, rawFormat) {
+    if (!position || !position.lat || !position.lng) {
+      return Promise.reject(new Error("invalid position"));
     }
+	
+	//if (!apiKey){
+	//	console.log("WARNING: GOOGLE MAPS REQUESTS PERFORMED WITHOUT API KEY");
+	//}
 
-    return this.geocodeRequest(`${googleUrl}?key=${apiKey}&latlng=${position.lat},${position.lng}`);
+    return this.geocodeRequest(`${googleUrl}?`+apiKey?`key=${apiKey}&`:''+`latlng=${position.lat},${position.lng}`);
   },
 
-  geocodeAddress(apiKey, address) {
-    if (!apiKey || !address) {
-      return Promise.reject(new Error("invalid apiKey / address"));
+  geocodeAddress(apiKey, address, rawFormat) {
+    if (!address) {
+      return Promise.reject(new Error("invalid address"));
     }
+	
+	//if (!apiKey){
+	//	console.log("WARNING: GOOGLE MAPS REQUESTS PERFORMED WITHOUT API KEY");
+	//}
 
-    return this.geocodeRequest(`${googleUrl}?key=${apiKey}&address=${encodeURI(address)}`);
+    return this.geocodeRequest(`${googleUrl}?`+apiKey?`key=${apiKey}&`:''+`address=${encodeURI(address)}`);
   },
 
-  async geocodeRequest(url) {
+  async geocodeRequest(url, rawFormat) {
     const res = await fetch(url);
     const json = await res.json();
 
     if (!json.results || json.status !== 'OK') {
       return Promise.reject(new Error(`geocoding error ${json.status}, ${json.error_message}`));
     }
-
-    return json.results.map(format);
+	
+	if (rawFormat){
+		return json.results;
+	}
+	else {
+		return json.results.map(format);
+	}
   }
 }

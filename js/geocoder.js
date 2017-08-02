@@ -29,7 +29,6 @@ export default {
   },
 
   geocodePosition(position, completeFormat) {
-	
 	var coords = toGeoPoint(position);
 	if (!coords) {
       return Promise.reject(new Error("invalid position"));
